@@ -2,14 +2,14 @@ package view;
 
 import javax.swing.*;
 
-public class QueueGUI {
+public class InputFrame {
     private JTextField nOfClientsField;
     private JTextField nOfQueuesField;
     private JTextField simIntervalField;
     private JTextField minArrivalTimeField;
     private JTextField maxArrivalTimeField;
     private JTextField minServiceTimeField;
-    private JTextField maxServiceTimeFIeld;
+    private JTextField maxServiceTimeField;
     private JButton validateInputButton;
     private JButton startSimButton;
     private JTextArea textArea1;
@@ -39,8 +39,8 @@ public class QueueGUI {
         return minServiceTimeField;
     }
 
-    public JTextField getMaxServiceTimeFIeld() {
-        return maxServiceTimeFIeld;
+    public JTextField getMaxServiceTimeField() {
+        return maxServiceTimeField;
     }
 
     public JButton getValidateInputButton() {
@@ -55,8 +55,14 @@ public class QueueGUI {
         return textArea1;
     }
 
-    public QueueGUI(JFrame frame) {
-        frame = new JFrame("UTCN Assignment #1");
+    private JFrame frame;
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public InputFrame() {
+        frame = new JFrame("Input");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setContentPane(panel1);
         frame.pack();
