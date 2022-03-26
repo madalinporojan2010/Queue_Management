@@ -71,7 +71,7 @@ public class SimulationManager implements Runnable{
         List<Task> generatedTasks = new ArrayList<>();
         for(int i = 0; i < numberOfClients; i++) {
             Random random = new Random();
-            Task t = new Task(i, random.nextInt(simulationInterval - 1), random.nextInt(minServiceTime, maxServiceTime));
+            Task t = new Task(i, random.nextInt(simulationInterval + 1), random.nextInt(minServiceTime, maxServiceTime + 1));
             generatedTasks.add(t);
         }
         generatedTasks.sort(Task::compareTo);
