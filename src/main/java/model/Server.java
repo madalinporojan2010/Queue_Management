@@ -1,19 +1,17 @@
 package model;
 
-import java.lang.annotation.Repeatable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server implements Runnable {
+    private AtomicInteger totalServiceTime;
     private BlockingQueue<Task> tasks;
     private AtomicInteger waitingPeriod;
 
     public Server() {
         tasks = new ArrayBlockingQueue<>(1000);
         waitingPeriod = new AtomicInteger();
+        totalServiceTime = new AtomicInteger();
     }
 
     public AtomicInteger getWaitingPeriod() {
@@ -24,6 +22,7 @@ public class Server implements Runnable {
         //System.out.println(tasks);
         tasks.add(newTask);
         waitingPeriod.getAndAdd(newTask.getServiceTime());
+        totalServiceTime.getAndAdd(newTask.getServiceTime());
     }
 
     @Override
@@ -36,6 +35,7 @@ public class Server implements Runnable {
                     Thread.sleep(t.getServiceTime() * 100L);
                     tasks.remove();
                     waitingPeriod.getAndAdd(-t.getServiceTime());
+                    totalServiceTime.getAndAdd(-t.getServiceTime());
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
@@ -43,8 +43,8 @@ public class Server implements Runnable {
         }
     }
 
-    public List<Task> getTasks() {
-        return new ArrayList<>(tasks);
+    public AtomicInteger getTotalServiceTime() {
+        return totalServiceTime;
     }
 
     public BlockingQueue<Task> getTasksQueue() {
@@ -58,6 +58,8 @@ public class Server implements Runnable {
             s += t.toString();
         }
         //s += "\nWaiting period: " + waitingPeriod;
+        if(!s.equals(""))
+            return s.substring(0, s.lastIndexOf("\n"));
         return s;
     }
 }

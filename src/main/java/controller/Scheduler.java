@@ -6,11 +6,18 @@ import model.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scheduler {
-    private List<Server> servers;
     private int maxNoServers;
     private int maxTasksPerServer;
+    private float avgWaitingTime;
+    private float maxAvgWaitingTime;
+    private float avgServiceTime;
+    private int peakHour;
+
+
+    private List<Server> servers;
     private Strategy strategy;
 
     public Scheduler(int maxNoServers, int maxTasksPerServer, SelectionPolicy selectionPolicy) {
@@ -43,10 +50,39 @@ public class Scheduler {
     }
 
     public boolean areServersEmpty() {
-        for(Server s : servers) {
-            if(s.getTasksQueue().size() > 0)
+        for (Server s : servers) {
+            if (s.getTasksQueue().size() > 0)
                 return false;
         }
         return true;
+    }
+
+    public float getAvgWaitingTime() {
+        avgWaitingTime = 0;
+        for (Server s : servers) {
+            avgWaitingTime += s.getWaitingPeriod().get();
+        }
+        avgWaitingTime /= maxNoServers;
+        return avgWaitingTime;
+    }
+
+    public float getAvgServiceTimePerQueues() {
+        avgServiceTime = 0;
+        for (Server s : servers) {
+            if(s.getTasksQueue().size() > 0)
+                avgServiceTime += s.getTotalServiceTime().get() * 1.0f / s.getTasksQueue().size();
+            else
+                avgServiceTime += s.getTotalServiceTime().get();
+        }
+        avgServiceTime /= maxNoServers;
+        return avgServiceTime;
+    }
+
+    public int getPeakHour(int currentTime) {
+        if (maxAvgWaitingTime < avgWaitingTime) {
+            maxAvgWaitingTime = avgWaitingTime;
+            peakHour = currentTime;
+        }
+        return peakHour;
     }
 }

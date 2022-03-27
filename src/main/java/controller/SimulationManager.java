@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ public class SimulationManager implements Runnable {
     private SimulationFrame simulationFrame;
     private List<Task> tasks;
     private SelectionPolicy selectionPolicy;
+    private Logger logger;
 
     public SimulationManager() {
         this.inputFrame = new InputFrame();
@@ -98,13 +100,9 @@ public class SimulationManager implements Runnable {
         return generatedTasks;
     }
 
-    @Override
-    public void run() {
-        int currentTime = 0;
-
-        Logger logger = Logger.getLogger("log");
+    public void setUpLogger() {
+        logger = Logger.getLogger("log");
         try {
-
             FileHandler fh = new FileHandler("log.txt");
             logger.addHandler(fh);
             CustomFormatter formatter = new CustomFormatter();
@@ -112,6 +110,30 @@ public class SimulationManager implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateSimulationFrame(int currentTime) {
+        simulationFrame.getWaitingArea().setText(tasks.toString());
+        try {
+            simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
+            simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
+            simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
+            simulationFrame.getQueue4Area().setText(scheduler.getServers().get(3).toString());
+            simulationFrame.getQueue5Area().setText(scheduler.getServers().get(4).toString());
+
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Queue is closed");
+        }
+        simulationFrame.getAvgWaitTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgWaitingTime()));
+        simulationFrame.getAvgServiceTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues()));
+        simulationFrame.getPeakHourField().setText(String.valueOf(scheduler.getPeakHour(currentTime)));
+        simulationFrame.getTimeField().setText(String.valueOf(currentTime));
+    }
+
+    @Override
+    public void run() {
+        setUpLogger();
+        int currentTime = 0;
 
         while (currentTime < simulationInterval) {
             logger.info("Time " + currentTime);
@@ -127,18 +149,9 @@ public class SimulationManager implements Runnable {
                 logger.info("Queue " + i + ": " + s);
                 i++;
             }
-            logger.info("\n");
-            try {
-            simulationFrame.getWaitingArea().setText(tasks.toString());
-                simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
-                simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
-                simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
-                simulationFrame.getQueue4Area().setText(scheduler.getServers().get(3).toString());
-                simulationFrame.getQueue5Area().setText(scheduler.getServers().get(4).toString());
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Queue is closed");
-            }
-            simulationFrame.getTimeField().setText(String.valueOf(currentTime));
+            logger.info("Avg waiting time: " + new DecimalFormat("0.00").format(scheduler.getAvgWaitingTime()) + "\nAvg service time: " +
+                    new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues()) + "\nPeak Hour: " + scheduler.getPeakHour(currentTime) + "\n");
+            updateSimulationFrame(currentTime);
             if (tasks.size() == 0 && scheduler.areServersEmpty()) {
                 break;
             }
