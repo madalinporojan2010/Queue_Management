@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="ac20c" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+      <component id="ac20c" class="javax.swing.JTextArea" binding="queue1Area">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <minimum-size width="75" height="400"/>
@@ -20,7 +20,7 @@
           <editable value="false"/>
         </properties>
       </component>
-      <component id="c8996" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
+      <component id="c8996" class="javax.swing.JTextArea" binding="queue2Area">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <minimum-size width="75" height="400"/>
@@ -32,7 +32,7 @@
           <editable value="false"/>
         </properties>
       </component>
-      <component id="3a0d4" class="javax.swing.JTextArea" binding="textArea3" default-binding="true">
+      <component id="3a0d4" class="javax.swing.JTextArea" binding="queue3Area">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <minimum-size width="75" height="400"/>
@@ -44,7 +44,7 @@
           <editable value="false"/>
         </properties>
       </component>
-      <component id="1d3b7" class="javax.swing.JTextArea" binding="textArea4" default-binding="true">
+      <component id="1d3b7" class="javax.swing.JTextArea" binding="waitingArea">
         <constraints>
           <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <minimum-size width="75" height="400"/>
@@ -94,7 +94,7 @@
         <properties>
           <horizontalAlignment value="10"/>
           <horizontalTextPosition value="10"/>
-          <text value="Queue #4"/>
+          <text value="WaitingQueue"/>
         </properties>
       </component>
       <vspacer id="2d024">

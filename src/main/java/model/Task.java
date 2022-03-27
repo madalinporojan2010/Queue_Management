@@ -28,4 +28,9 @@ public class Task implements Comparable<Task> {
     public int compareTo(Task o) {
         return Integer.compare(this.arrivalTime, o.arrivalTime);
     }
+
+    @Override
+    public String toString() {
+        return "(" + id + ", " + arrivalTime + ", " + serviceTime + ")\n";
+    }
 }
