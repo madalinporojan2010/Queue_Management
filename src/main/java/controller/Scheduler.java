@@ -21,6 +21,7 @@ public class Scheduler {
             thread.start();
             servers.add(server);
         }
+        this.maxNoServers = maxNoServers;
         this.maxTasksPerServer = maxTasksPerServer;
         changeStrategy(selectionPolicy);
     }

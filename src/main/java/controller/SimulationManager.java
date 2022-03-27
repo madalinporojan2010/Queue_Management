@@ -6,25 +6,13 @@ import view.InputFrame;
 import view.SimulationFrame;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.StampedLock;
 import java.util.logging.FileHandler;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class SimulationManager implements Runnable {
     private boolean isInputFine;
@@ -42,18 +30,7 @@ public class SimulationManager implements Runnable {
     private List<Task> tasks;
     private SelectionPolicy selectionPolicy;
 
-    private FileWriter myWriter;
-    boolean isClosed = false;
-
     public SimulationManager() {
-        File f = new File("log.txt");
-        try {
-            f.delete();
-            f.createNewFile();
-            myWriter = new FileWriter("log.txt");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
         this.inputFrame = new InputFrame();
         isInputFine = false;
         ActionListener verifyInputListener = e -> {
@@ -70,16 +47,14 @@ public class SimulationManager implements Runnable {
 
                 tasks = generateRandomTasks();
                 inputFrame.getFrame().dispose();
-                isClosed = true;
-
 
                 ActionListener closeSimulationListener = close -> {
                     System.exit(0);
                 };
                 if (simulationFrame != null)
                     simulationFrame.getCloseSimButton().addActionListener(closeSimulationListener);
-                Thread t = new Thread(this);
 
+                Thread t = new Thread(this);
                 t.start();
             } else {
                 JOptionPane.showMessageDialog(null, "CHECK INPUT!", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -112,7 +87,7 @@ public class SimulationManager implements Runnable {
     }
 
     public List<Task> generateRandomTasks() {
-        List<Task> generatedTasks = Collections.synchronizedList(new ArrayList<>());
+        List<Task> generatedTasks = Collections.synchronizedList(new CustomArrayList());
 
         for (int i = 0; i < numberOfClients; i++) {
             Random random = new Random();
@@ -153,15 +128,21 @@ public class SimulationManager implements Runnable {
                 i++;
             }
             logger.info("\n");
-//            simulationFrame.getWaitingArea().setText(tasks.toString());
-//            simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
-//            simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
-//            simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
-//            simulationFrame.getTextField1().setText(String.valueOf(currentTime));
-            currentTime++;
+            try {
+            simulationFrame.getWaitingArea().setText(tasks.toString());
+                simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
+                simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
+                simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
+                simulationFrame.getQueue4Area().setText(scheduler.getServers().get(3).toString());
+                simulationFrame.getQueue5Area().setText(scheduler.getServers().get(4).toString());
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Queue is closed");
+            }
+            simulationFrame.getTimeField().setText(String.valueOf(currentTime));
             if (tasks.size() == 0 && scheduler.areServersEmpty()) {
                 break;
             }
+            currentTime++;
             synchronized (this) {
                 try {
                     wait(100);
@@ -170,16 +151,10 @@ public class SimulationManager implements Runnable {
                 }
             }
         }
-    }
-
-    public int getSimulationInterval() {
-        return simulationInterval;
+        JOptionPane.showMessageDialog(null, "SIMULATION DONE AT: " + currentTime + " s", "DONE", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void main(String[] args) {
-        SimulationManager gen = new SimulationManager();
-//        Thread t = new Thread(gen);
-//        t.start();
-
+        new SimulationManager();
     }
 }
