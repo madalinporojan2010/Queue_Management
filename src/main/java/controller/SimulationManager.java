@@ -1,15 +1,30 @@
 package controller;
 
+import model.Server;
 import model.Task;
 import view.InputFrame;
 import view.SimulationFrame;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.StampedLock;
+import java.util.logging.FileHandler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class SimulationManager implements Runnable {
     private boolean isInputFine;
@@ -27,7 +42,18 @@ public class SimulationManager implements Runnable {
     private List<Task> tasks;
     private SelectionPolicy selectionPolicy;
 
-    public SimulationManager(SelectionPolicy selectionPolicy) {
+    private FileWriter myWriter;
+    boolean isClosed = false;
+
+    public SimulationManager() {
+        File f = new File("log.txt");
+        try {
+            f.delete();
+            f.createNewFile();
+            myWriter = new FileWriter("log.txt");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         this.inputFrame = new InputFrame();
         isInputFine = false;
         ActionListener verifyInputListener = e -> {
@@ -38,15 +64,23 @@ public class SimulationManager implements Runnable {
         };
         ActionListener simulateListener = e -> {
             if (isInputFine) {
-                scheduler = new Scheduler(numberOfQueues, numberOfClients, SelectionPolicy.SHORTEST_QUEUE);
+                scheduler = new Scheduler(numberOfQueues, numberOfClients, selectionPolicy);
 
                 simulationFrame = new SimulationFrame();
-                for (int i = 0; i < numberOfQueues; i++) {
-                    Thread t = new Thread(this);
-                    t.start();
-                }
+
                 tasks = generateRandomTasks();
                 inputFrame.getFrame().dispose();
+                isClosed = true;
+
+
+                ActionListener closeSimulationListener = close -> {
+                    System.exit(0);
+                };
+                if (simulationFrame != null)
+                    simulationFrame.getCloseSimButton().addActionListener(closeSimulationListener);
+                Thread t = new Thread(this);
+
+                t.start();
             } else {
                 JOptionPane.showMessageDialog(null, "CHECK INPUT!", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -64,7 +98,11 @@ public class SimulationManager implements Runnable {
             maxArrivalTime = Integer.parseInt(inputFrame.getMaxArrivalTimeField().getText());
             minServiceTime = Integer.parseInt(inputFrame.getMinServiceTimeField().getText());
             maxServiceTime = Integer.parseInt(inputFrame.getMaxServiceTimeField().getText());
-
+            if (inputFrame.getShortestQueueStrategyRadioButton().isSelected()) {
+                selectionPolicy = SelectionPolicy.SHORTEST_QUEUE;
+            } else {
+                selectionPolicy = SelectionPolicy.SHORTEST_TIME;
+            }
         } catch (NumberFormatException numberFormatException) {
             return false;
         }
@@ -85,44 +123,63 @@ public class SimulationManager implements Runnable {
         return generatedTasks;
     }
 
-    public synchronized void updateSimulationFrame(Task t) {
-        System.out.println(t);
-        simulationFrame.getWaitingArea().append(t + "\n");
-    }
-
     @Override
-    public synchronized void run() {
+    public void run() {
         int currentTime = 0;
 
-        // System.out.println(simulationInterval);
+        Logger logger = Logger.getLogger("log");
+        try {
+
+            FileHandler fh = new FileHandler("log.txt");
+            logger.addHandler(fh);
+            CustomFormatter formatter = new CustomFormatter();
+            fh.setFormatter(formatter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         while (currentTime < simulationInterval) {
-            if (tasks != null) {
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (tasks.get(i).getArrivalTime() == currentTime) {
-                        scheduler.dispatchTask(tasks.get(i));
-                        tasks.remove(i);
-                    }
+            logger.info("Time " + currentTime);
+            for (int i = 0; i < tasks.size() && i >= 0; i++) {
+                if (tasks.get(i).getArrivalTime() == currentTime) {
+                    scheduler.dispatchTask(tasks.get(i));
+                    tasks.remove(i);
+                    i--;
                 }
-                simulationFrame.getWaitingArea().setText(tasks.toString());
-                simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
-                simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
-                simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
-                simulationFrame.getTextField1().setText(String.valueOf(currentTime));
-                currentTime++;
-                synchronized (this) {
-                    try {
-                        this.wait(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            }
+            int i = 0;
+            for (Server s : scheduler.getServers()) {
+                logger.info("Queue " + i + ": " + s);
+                i++;
+            }
+            logger.info("\n");
+//            simulationFrame.getWaitingArea().setText(tasks.toString());
+//            simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
+//            simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
+//            simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
+//            simulationFrame.getTextField1().setText(String.valueOf(currentTime));
+            currentTime++;
+            if (tasks.size() == 0 && scheduler.areServersEmpty()) {
+                break;
+            }
+            synchronized (this) {
+                try {
+                    wait(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
+    public int getSimulationInterval() {
+        return simulationInterval;
+    }
+
     public static void main(String[] args) {
-        SimulationManager gen = new SimulationManager(SelectionPolicy.SHORTEST_QUEUE);
-        Thread t = new Thread(gen);
-        t.start();
+        SimulationManager gen = new SimulationManager();
+//        Thread t = new Thread(gen);
+//        t.start();
+
     }
 }

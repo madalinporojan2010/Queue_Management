@@ -40,4 +40,12 @@ public class Scheduler {
     public List<Server> getServers() {
         return servers;
     }
+
+    public boolean areServersEmpty() {
+        for(Server s : servers) {
+            if(s.getTasksQueue().size() > 0)
+                return false;
+        }
+        return true;
+    }
 }

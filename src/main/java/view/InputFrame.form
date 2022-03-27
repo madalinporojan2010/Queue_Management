@@ -165,6 +165,31 @@
           <horizontalAlignment value="0"/>
         </properties>
       </component>
+      <component id="12a40" class="javax.swing.JRadioButton" binding="shortestQueueStrategyRadioButton" default-binding="true">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <selected value="true"/>
+          <text value="Shortest Queue Strategy"/>
+        </properties>
+      </component>
+      <component id="41fe0" class="javax.swing.JRadioButton" binding="shortestTimeQueueStrategyRadioButton" default-binding="true">
+        <constraints>
+          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <selected value="false"/>
+          <text value="Shortest Time Queue Strategy"/>
+        </properties>
+      </component>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="buttonGroup1">
+      <member id="41fe0"/>
+      <member id="41fe0"/>
+      <member id="12a40"/>
+    </group>
+  </buttonGroups>
 </form>

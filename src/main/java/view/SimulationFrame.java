@@ -7,11 +7,14 @@ public class SimulationFrame {
     private JTextArea queue2Area;
     private JTextArea queue3Area;
     private JTextArea waitingArea;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField timeField;
+    private JTextField avgWaitTimeField;
+    private JTextField avgServiceTimeField;
+    private JTextField peakHourField;
     private JPanel panel1;
+    private JTextArea queue4Area;
+    private JTextArea queue5Area;
+    private JButton closeSimButton;
 
     public JTextArea getQueue1Area() {
         return queue1Area;
@@ -29,24 +32,36 @@ public class SimulationFrame {
         return waitingArea;
     }
 
-    public JTextField getTextField1() {
-        return textField1;
+    public JTextField getTimeField() {
+        return timeField;
     }
 
-    public JTextField getTextField2() {
-        return textField2;
+    public JTextField getAvgWaitTimeField() {
+        return avgWaitTimeField;
     }
 
-    public JTextField getTextField3() {
-        return textField3;
+    public JTextField getAvgServiceTimeField() {
+        return avgServiceTimeField;
     }
 
-    public JTextField getTextField4() {
-        return textField4;
+    public JTextField getPeakHourField() {
+        return peakHourField;
     }
 
     public JPanel getPanel1() {
         return panel1;
+    }
+
+    public JTextArea getQueue4Area() {
+        return queue4Area;
+    }
+
+    public JTextArea getQueue5Area() {
+        return queue5Area;
+    }
+
+    public JButton getCloseSimButton() {
+        return closeSimButton;
     }
 
     public JFrame getFrame() {
@@ -64,4 +79,5 @@ public class SimulationFrame {
         frame.setVisible(true);
         frame.setResizable(false);
     }
+
 }

@@ -14,6 +14,8 @@ public class InputFrame {
     private JButton startSimButton;
     private JTextArea textArea1;
     private JPanel panel1;
+    private JRadioButton shortestQueueStrategyRadioButton;
+    private JRadioButton shortestTimeQueueStrategyRadioButton;
 
     public JTextField getnOfClientsField() {
         return nOfClientsField;
@@ -45,6 +47,18 @@ public class InputFrame {
 
     public JButton getValidateInputButton() {
         return validateInputButton;
+    }
+
+    public JPanel getPanel1() {
+        return panel1;
+    }
+
+    public JRadioButton getShortestQueueStrategyRadioButton() {
+        return shortestQueueStrategyRadioButton;
+    }
+
+    public JRadioButton getShortestTimeQueueStrategyRadioButton() {
+        return shortestTimeQueueStrategyRadioButton;
     }
 
     public JButton getStartSimButton() {

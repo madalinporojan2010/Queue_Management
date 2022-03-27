@@ -16,10 +16,14 @@ public class Server implements Runnable {
         waitingPeriod = new AtomicInteger();
     }
 
+    public AtomicInteger getWaitingPeriod() {
+        return waitingPeriod;
+    }
+
     public void addTask(Task newTask) {
-        System.out.println(tasks);
+        //System.out.println(tasks);
         tasks.add(newTask);
-        waitingPeriod.getAndIncrement();
+        waitingPeriod.getAndAdd(newTask.getServiceTime());
     }
 
     @Override
@@ -28,10 +32,10 @@ public class Server implements Runnable {
             try {
                 if (tasks.size() > 0) {
                     Task t = tasks.peek();
-                    System.out.println(waitingPeriod);
-                    Thread.sleep(t.getServiceTime() * 1000L);
+                    //System.out.println(waitingPeriod);
+                    Thread.sleep(t.getServiceTime() * 100L);
                     tasks.remove();
-                    waitingPeriod.getAndDecrement();
+                    waitingPeriod.getAndAdd(-t.getServiceTime());
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
@@ -43,11 +47,15 @@ public class Server implements Runnable {
         return new ArrayList<>(tasks);
     }
 
+    public BlockingQueue<Task> getTasksQueue() {
+        return tasks;
+    }
+
     @Override
     public String toString() {
         String s = "";
         for (Task t : tasks) {
-            s += t.toString() + "\n";
+            s += t.toString();
         }
         //s += "\nWaiting period: " + waitingPeriod;
         return s;
