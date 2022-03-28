@@ -2,7 +2,9 @@ package controller;
 
 import model.Server;
 import model.Task;
+import view.SimulationFrame;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,22 +16,27 @@ public class Scheduler {
     private float avgWaitingTime;
     private float maxAvgWaitingTime;
     private float avgServiceTime;
-    private int peakHour;
 
+    private float finalAvgWaitingTime;
+
+
+    private float finalAvgServiceTime;
+    private int peakHour;
+    private int currentTime;
 
     private List<Server> servers;
     private Strategy strategy;
 
     public Scheduler(int maxNoServers, int maxTasksPerServer, SelectionPolicy selectionPolicy) {
         servers = Collections.synchronizedList(new ArrayList<>());
+        this.maxTasksPerServer = maxTasksPerServer;
         for (int i = 0; i < maxNoServers; i++) {
-            Server server = new Server();
+            Server server = new Server(maxTasksPerServer);
             Thread thread = new Thread(server);
             thread.start();
             servers.add(server);
         }
         this.maxNoServers = maxNoServers;
-        this.maxTasksPerServer = maxTasksPerServer;
         changeStrategy(selectionPolicy);
     }
 
@@ -51,30 +58,44 @@ public class Scheduler {
 
     public boolean areServersEmpty() {
         for (Server s : servers) {
-            if (s.getTasksQueue().size() > 0)
+            if (s.getTasksQueue().size() > 0) {
                 return false;
+            }
         }
         return true;
+    }
+
+    public float getFinalAvgServiceTime() {
+        return finalAvgServiceTime;
+    }
+
+    public float getFinalAvgWaitingTime() {
+        return finalAvgWaitingTime;
     }
 
     public float getAvgWaitingTime() {
         avgWaitingTime = 0;
         for (Server s : servers) {
+
             avgWaitingTime += s.getWaitingPeriod().get();
         }
         avgWaitingTime /= maxNoServers;
+        finalAvgWaitingTime += avgWaitingTime;
         return avgWaitingTime;
     }
 
-    public float getAvgServiceTimePerQueues() {
+    public float getAvgServiceTimePerQueues(int currentTime) {
         avgServiceTime = 0;
         for (Server s : servers) {
-            if(s.getTasksQueue().size() > 0)
+            if (s.getTasksQueue().size() > 0)
                 avgServiceTime += s.getTotalServiceTime().get() * 1.0f / s.getTasksQueue().size();
             else
                 avgServiceTime += s.getTotalServiceTime().get();
         }
+
         avgServiceTime /= maxNoServers;
+            finalAvgServiceTime += avgServiceTime;
+            this.currentTime = currentTime;
         return avgServiceTime;
     }
 

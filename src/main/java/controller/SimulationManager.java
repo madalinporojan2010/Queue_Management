@@ -6,13 +6,16 @@ import view.InputFrame;
 import view.SimulationFrame;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.List;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SimulationManager implements Runnable {
@@ -83,7 +86,7 @@ public class SimulationManager implements Runnable {
         } catch (NumberFormatException numberFormatException) {
             return false;
         }
-        return (minArrivalTime < maxArrivalTime) && (minServiceTime < maxServiceTime) &&
+        return (minArrivalTime <= maxArrivalTime) && (minServiceTime <= maxServiceTime) &&
                 (minServiceTime > 0) && (minArrivalTime > 0) && numberOfClients > 0 && numberOfQueues > 0
                 && numberOfQueues <= numberOfClients;
     }
@@ -114,18 +117,23 @@ public class SimulationManager implements Runnable {
 
     public void updateSimulationFrame(int currentTime) {
         simulationFrame.getWaitingArea().setText(tasks.toString());
-        try {
-            simulationFrame.getQueue1Area().setText(scheduler.getServers().get(0).toString());
-            simulationFrame.getQueue2Area().setText(scheduler.getServers().get(1).toString());
-            simulationFrame.getQueue3Area().setText(scheduler.getServers().get(2).toString());
-            simulationFrame.getQueue4Area().setText(scheduler.getServers().get(3).toString());
-            simulationFrame.getQueue5Area().setText(scheduler.getServers().get(4).toString());
-
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Queue is closed");
+        if (tasks.size() == 0) {
+            simulationFrame.getWaitingArea().setVisible(false);
         }
+        int numberOfDisplayedQueues = Math.min(numberOfQueues, 5);
+        for (int i = 0; i < numberOfDisplayedQueues; i++) {
+            simulationFrame.getQueueAreas()[i].setText(scheduler.getServers().get(i).toString());
+            if (scheduler.getServers().get(i).getTasksQueue().size() == 0) {
+                simulationFrame.getQueueAreas()[i].setVisible(false);
+                simulationFrame.getQueueLabels()[i].setForeground(Color.RED);
+            } else {
+                simulationFrame.getQueueAreas()[i].setVisible(true);
+                simulationFrame.getQueueLabels()[i].setForeground(Color.GREEN);
+            }
+        }
+
         simulationFrame.getAvgWaitTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgWaitingTime()));
-        simulationFrame.getAvgServiceTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues()));
+        simulationFrame.getAvgServiceTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues(currentTime)));
         simulationFrame.getPeakHourField().setText(String.valueOf(scheduler.getPeakHour(currentTime)));
         simulationFrame.getTimeField().setText(String.valueOf(currentTime));
     }
@@ -136,7 +144,7 @@ public class SimulationManager implements Runnable {
         int currentTime = 0;
 
         while (currentTime < simulationInterval) {
-            logger.info("Time " + currentTime);
+            logger.info("\nTime " + currentTime);
             for (int i = 0; i < tasks.size() && i >= 0; i++) {
                 if (tasks.get(i).getArrivalTime() == currentTime) {
                     scheduler.dispatchTask(tasks.get(i));
@@ -144,13 +152,9 @@ public class SimulationManager implements Runnable {
                     i--;
                 }
             }
-            int i = 0;
             for (Server s : scheduler.getServers()) {
-                logger.info("Queue " + i + ": " + s);
-                i++;
+                logger.info("Queue " + (scheduler.getServers().indexOf(s) + 1) + ": " + s);
             }
-            logger.info("Avg waiting time: " + new DecimalFormat("0.00").format(scheduler.getAvgWaitingTime()) + "\nAvg service time: " +
-                    new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues()) + "\nPeak Hour: " + scheduler.getPeakHour(currentTime) + "\n");
             updateSimulationFrame(currentTime);
             if (tasks.size() == 0 && scheduler.areServersEmpty()) {
                 break;
@@ -164,7 +168,10 @@ public class SimulationManager implements Runnable {
                 }
             }
         }
-        JOptionPane.showMessageDialog(null, "SIMULATION DONE AT: " + currentTime + " s", "DONE", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "SIMULATION DONE AT: " + currentTime + " s\n" + "Average waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + " s"
+                + "\nAverage service time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgServiceTime() / (currentTime - 1)) + " s" + "\nPeak hour: " + scheduler.getPeakHour(currentTime) + " s", "DONE", JOptionPane.INFORMATION_MESSAGE);
+        logger.info("\nAvg waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + "\nAvg service time: " +
+                new DecimalFormat("0.00").format(scheduler.getFinalAvgServiceTime() / (currentTime - 1)) + "\nPeak Hour: " + scheduler.getPeakHour(currentTime));
     }
 
     public static void main(String[] args) {

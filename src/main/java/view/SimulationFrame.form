@@ -8,33 +8,39 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="7ae32" class="javax.swing.JLabel">
+      <component id="7ae32" class="javax.swing.JLabel" binding="queue1Label">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-14089972"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
+          <labelFor value="ac20c"/>
           <text value="Queue #1"/>
         </properties>
       </component>
-      <component id="dfb3c" class="javax.swing.JLabel">
+      <component id="dfb3c" class="javax.swing.JLabel" binding="queue2Label">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-14089972"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
+          <labelFor value="c8996"/>
           <text value="Queue #2"/>
         </properties>
       </component>
-      <component id="50fc1" class="javax.swing.JLabel">
+      <component id="50fc1" class="javax.swing.JLabel" binding="queue3Label">
         <constraints>
           <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-14089972"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
+          <labelFor value="3a0d4"/>
           <text value="Queue #3"/>
         </properties>
       </component>
@@ -128,6 +134,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -147,6 +154,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -166,6 +174,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -205,6 +214,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -224,6 +234,8 @@
             <constraints/>
             <properties>
               <editable value="false"/>
+              <enabled value="true"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -242,25 +254,29 @@
           <text value="0"/>
         </properties>
       </component>
-      <component id="5b62e" class="javax.swing.JLabel">
+      <component id="5b62e" class="javax.swing.JLabel" binding="queue5Label">
         <constraints>
           <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-14089972"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
+          <labelFor value="27db1"/>
           <text value="Queue #5"/>
         </properties>
       </component>
-      <component id="4a3ec" class="javax.swing.JLabel">
+      <component id="4a3ec" class="javax.swing.JLabel" binding="queue4Label">
         <constraints>
           <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="91" height="16"/>
           </grid>
         </constraints>
         <properties>
+          <foreground color="-14089972"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
+          <labelFor value="62e96"/>
           <text value="Queue #4"/>
         </properties>
       </component>

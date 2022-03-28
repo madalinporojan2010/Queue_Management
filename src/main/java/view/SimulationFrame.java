@@ -15,6 +15,30 @@ public class SimulationFrame {
     private JTextArea queue4Area;
     private JTextArea queue5Area;
     private JButton closeSimButton;
+    private JLabel queue1Label;
+    private JLabel queue2Label;
+    private JLabel queue3Label;
+    private JLabel queue4Label;
+    private JLabel queue5Label;
+
+    public JTextArea[] getQueueAreas() {
+        JTextArea[] areas = new JTextArea[5];
+        areas[0] = queue1Area;
+        areas[1] = queue2Area;
+        areas[2] = queue3Area;
+        areas[3] = queue4Area;
+        areas[4] = queue5Area;
+        return areas;
+    }
+    public JLabel[] getQueueLabels() {
+        JLabel[] labels = new JLabel[5];
+        labels[0] = queue1Label;
+        labels[1] = queue2Label;
+        labels[2] = queue3Label;
+        labels[3] = queue4Label;
+        labels[4] = queue5Label;
+        return labels;
+    }
 
     public JTextArea getQueue1Area() {
         return queue1Area;
@@ -79,5 +103,4 @@ public class SimulationFrame {
         frame.setVisible(true);
         frame.setResizable(false);
     }
-
 }
