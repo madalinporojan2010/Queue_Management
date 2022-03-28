@@ -20,7 +20,7 @@ public class Server implements Runnable {
 
     public void addTask(Task newTask) {
         tasks.add(newTask);
-        waitingPeriod.getAndAdd(newTask.getServiceTime());
+        waitingPeriod.getAndAdd(1);
         totalServiceTime.getAndAdd(newTask.getServiceTime());
     }
 
@@ -32,7 +32,7 @@ public class Server implements Runnable {
                     Task t = tasks.peek();
                     Thread.sleep(t.getServiceTime() * 100L);
                     tasks.remove();
-                    waitingPeriod.getAndAdd(-t.getServiceTime());
+                    waitingPeriod.getAndAdd(-1);
                     totalServiceTime.getAndAdd(-t.getServiceTime());
                 }
             } catch (InterruptedException e) {
@@ -55,7 +55,7 @@ public class Server implements Runnable {
         for (Task t : tasks) {
             s += t.toString();
         }
-        if(!s.equals(""))
+        if (!s.equals(""))
             return s.substring(0, s.lastIndexOf("\n"));
         return s;
     }

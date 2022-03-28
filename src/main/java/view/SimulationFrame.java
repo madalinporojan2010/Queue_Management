@@ -30,6 +30,7 @@ public class SimulationFrame {
         areas[4] = queue5Area;
         return areas;
     }
+
     public JLabel[] getQueueLabels() {
         JLabel[] labels = new JLabel[5];
         labels[0] = queue1Label;

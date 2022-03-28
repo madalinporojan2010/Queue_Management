@@ -10,7 +10,7 @@ public class CustomArrayList extends ArrayList<Task> {
     @Override
     public String toString() {
         String result = "";
-        for(Task t : this) {
+        for (Task t : this) {
             result += t;
         }
         return result;

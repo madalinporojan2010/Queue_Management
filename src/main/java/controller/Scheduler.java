@@ -2,13 +2,10 @@ package controller;
 
 import model.Server;
 import model.Task;
-import view.SimulationFrame;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scheduler {
     private int maxNoServers;
@@ -22,7 +19,6 @@ public class Scheduler {
 
     private float finalAvgServiceTime;
     private int peakHour;
-    private int currentTime;
 
     private List<Server> servers;
     private Strategy strategy;
@@ -77,14 +73,14 @@ public class Scheduler {
         avgWaitingTime = 0;
         for (Server s : servers) {
 
-            avgWaitingTime += s.getWaitingPeriod().get();
+            avgWaitingTime += (float) s.getWaitingPeriod().get();
         }
         avgWaitingTime /= maxNoServers;
         finalAvgWaitingTime += avgWaitingTime;
         return avgWaitingTime;
     }
 
-    public float getAvgServiceTimePerQueues(int currentTime) {
+    public float getAvgServiceTimePerQueues() {
         avgServiceTime = 0;
         for (Server s : servers) {
             if (s.getTasksQueue().size() > 0)
@@ -94,8 +90,7 @@ public class Scheduler {
         }
 
         avgServiceTime /= maxNoServers;
-            finalAvgServiceTime += avgServiceTime;
-            this.currentTime = currentTime;
+        finalAvgServiceTime += avgServiceTime;
         return avgServiceTime;
     }
 

@@ -10,8 +10,8 @@ public class ShortestQueueStrategy implements Strategy {
     public void addTask(List<Server> servers, Task task) {
         int minNOfClients = servers.get(0).getTasksQueue().size();
         int minIndex = 0;
-        for(Server s : servers) {
-            if(minNOfClients > s.getTasksQueue().size()) {
+        for (Server s : servers) {
+            if (minNOfClients > s.getTasksQueue().size()) {
                 minNOfClients = s.getTasksQueue().size();
                 minIndex = servers.indexOf(s);
             }

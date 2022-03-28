@@ -8,14 +8,12 @@ import view.SimulationFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SimulationManager implements Runnable {
@@ -133,7 +131,7 @@ public class SimulationManager implements Runnable {
         }
 
         simulationFrame.getAvgWaitTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgWaitingTime()));
-        simulationFrame.getAvgServiceTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues(currentTime)));
+        simulationFrame.getAvgServiceTimeField().setText(new DecimalFormat("0.00").format(scheduler.getAvgServiceTimePerQueues()));
         simulationFrame.getPeakHourField().setText(String.valueOf(scheduler.getPeakHour(currentTime)));
         simulationFrame.getTimeField().setText(String.valueOf(currentTime));
     }
@@ -142,7 +140,6 @@ public class SimulationManager implements Runnable {
     public void run() {
         setUpLogger();
         int currentTime = 0;
-
         while (currentTime < simulationInterval) {
             logger.info("\nTime " + currentTime);
             for (int i = 0; i < tasks.size() && i >= 0; i++) {
