@@ -1,3 +1,9 @@
+Waiting queue:
+(1, 2, 4)
+(3, 6, 2)
+(0, 15, 2)
+(2, 26, 2)
+
 
 Time 0
 Queue 1: 
@@ -8,27 +14,27 @@ Queue 1:
 Queue 2: 
 
 Time 2
-Queue 1: 
+Queue 1: (1, 2, 4)
 Queue 2: 
 
 Time 3
-Queue 1: 
+Queue 1: (1, 2, 4)
 Queue 2: 
 
 Time 4
-Queue 1: (3, 4, 4)
+Queue 1: (1, 2, 4)
 Queue 2: 
 
 Time 5
-Queue 1: (3, 4, 4)
+Queue 1: (1, 2, 4)
 Queue 2: 
 
 Time 6
-Queue 1: (3, 4, 4)
+Queue 1: (3, 6, 2)
 Queue 2: 
 
 Time 7
-Queue 1: (3, 4, 4)
+Queue 1: (3, 6, 2)
 Queue 2: 
 
 Time 8
@@ -60,41 +66,61 @@ Queue 1:
 Queue 2: 
 
 Time 15
-Queue 1: 
+Queue 1: (0, 15, 2)
 Queue 2: 
 
 Time 16
-Queue 1: (0, 16, 2)
+Queue 1: (0, 15, 2)
 Queue 2: 
 
 Time 17
-Queue 1: (0, 16, 2)
-Queue 2: (2, 17, 4)
+Queue 1: 
+Queue 2: 
 
 Time 18
 Queue 1: 
-Queue 2: (2, 17, 4)
+Queue 2: 
 
 Time 19
 Queue 1: 
-Queue 2: (2, 17, 4)
+Queue 2: 
 
 Time 20
-Queue 1: (1, 20, 3)
-Queue 2: (2, 17, 4)
+Queue 1: 
+Queue 2: 
 
 Time 21
-Queue 1: (1, 20, 3)
+Queue 1: 
 Queue 2: 
 
 Time 22
-Queue 1: (1, 20, 3)
+Queue 1: 
 Queue 2: 
 
 Time 23
 Queue 1: 
 Queue 2: 
 
-Avg waiting time: 0.30 s
-Avg service time: 1.02 s
-Peak Hour: 17 s
+Time 24
+Queue 1: 
+Queue 2: 
+
+Time 25
+Queue 1: 
+Queue 2: 
+
+Time 26
+Queue 1: (2, 26, 2)
+Queue 2: 
+
+Time 27
+Queue 1: (2, 26, 2)
+Queue 2: 
+
+Time 28
+Queue 1: 
+Queue 2: 
+
+Avg waiting time: 0.19 s
+Avg service time: 0.52 s
+Peak Hour: 2 s
