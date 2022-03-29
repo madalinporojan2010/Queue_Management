@@ -57,8 +57,8 @@ public class SimulationManager implements Runnable {
                 if (simulationFrame != null)
                     simulationFrame.getCloseSimButton().addActionListener(closeSimulationListener);
 
-                Thread t = new Thread(this);
-                t.start();
+                Thread thread = new Thread(this);
+                thread.start();
             } else {
                 JOptionPane.showMessageDialog(null, "CHECK INPUT!", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -111,6 +111,7 @@ public class SimulationManager implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info("Waiting queue:\n" + tasks);
     }
 
     public void updateSimulationFrame(int currentTime) {
@@ -157,12 +158,10 @@ public class SimulationManager implements Runnable {
                 break;
             }
             currentTime++;
-            synchronized (this) {
-                try {
-                    wait(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         JOptionPane.showMessageDialog(null, "SIMULATION DONE AT: " + currentTime + " s\n" + "Average waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + " s"

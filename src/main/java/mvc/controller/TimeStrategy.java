@@ -10,10 +10,10 @@ public class TimeStrategy implements Strategy {
     public void addTask(List<Server> servers, Task task) {
         int minimumWaitingTime = servers.get(0).getWaitingPeriod().get();
         int minIndex = 0;
-        for (Server s : servers) {
-            if (minimumWaitingTime > s.getWaitingPeriod().get()) {
-                minimumWaitingTime = s.getWaitingPeriod().get();
-                minIndex = servers.indexOf(s);
+        for (Server server : servers) {
+            if (minimumWaitingTime > server.getWaitingPeriod().get()) {
+                minimumWaitingTime = server.getWaitingPeriod().get();
+                minIndex = servers.indexOf(server);
             }
         }
         servers.get(minIndex).addTask(task);

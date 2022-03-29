@@ -29,11 +29,11 @@ public class Server implements Runnable {
         while (true) {
             try {
                 if (tasks.size() > 0) {
-                    Task t = tasks.peek();
-                    Thread.sleep(t.getServiceTime() * 100L);
+                    Task task = tasks.peek();
+                    Thread.sleep(task.getServiceTime() * 100L);
                     tasks.remove();
                     waitingPeriod.getAndAdd(-1);
-                    totalServiceTime.getAndAdd(-t.getServiceTime());
+                    totalServiceTime.getAndAdd(-task.getServiceTime());
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());

@@ -53,8 +53,8 @@ public class Scheduler {
     }
 
     public boolean areServersEmpty() {
-        for (Server s : servers) {
-            if (s.getTasksQueue().size() > 0) {
+        for (Server server : servers) {
+            if (server.getTasksQueue().size() > 0) {
                 return false;
             }
         }
@@ -71,9 +71,9 @@ public class Scheduler {
 
     public float getAvgWaitingTime() {
         avgWaitingTime = 0;
-        for (Server s : servers) {
+        for (Server server : servers) {
 
-            avgWaitingTime += (float) s.getWaitingPeriod().get();
+            avgWaitingTime += (float) server.getWaitingPeriod().get();
         }
         avgWaitingTime /= maxNoServers;
         finalAvgWaitingTime += avgWaitingTime;
@@ -82,11 +82,11 @@ public class Scheduler {
 
     public float getAvgServiceTimePerQueues() {
         avgServiceTime = 0;
-        for (Server s : servers) {
-            if (s.getTasksQueue().size() > 0)
-                avgServiceTime += s.getTotalServiceTime().get() * 1.0f / s.getTasksQueue().size();
+        for (Server server : servers) {
+            if (server.getTasksQueue().size() > 0)
+                avgServiceTime += server.getTotalServiceTime().get() * 1.0f / server.getTasksQueue().size();
             else
-                avgServiceTime += s.getTotalServiceTime().get();
+                avgServiceTime += server.getTotalServiceTime().get();
         }
 
         avgServiceTime /= maxNoServers;

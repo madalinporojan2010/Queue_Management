@@ -10,8 +10,8 @@ public class CustomArrayList extends ArrayList<Task> {
     @Override
     public String toString() {
         String result = "";
-        for (Task t : this) {
-            result += t;
+        for (Task task : this) {
+            result += task;
         }
         return result;
     }
