@@ -480,6 +480,6 @@ Queue 3:
 Queue 4: 
 Queue 5: 
 
-Avg waiting time: 1.50
-Avg service time: 4.04
-Peak Hour: 31
+Avg waiting time: 1.50 s
+Avg service time: 4.04 s
+Peak Hour: 31 s

@@ -1,7 +1,7 @@
-package controller;
+package mvc.controller;
 
-import model.Server;
-import model.Task;
+import mvc.model.Server;
+import mvc.model.Task;
 
 import java.util.List;
 

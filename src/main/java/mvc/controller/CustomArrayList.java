@@ -1,6 +1,6 @@
-package controller;
+package mvc.controller;
 
-import model.Task;
+import mvc.model.Task;
 
 import java.util.ArrayList;
 

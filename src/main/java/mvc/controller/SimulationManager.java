@@ -1,9 +1,9 @@
-package controller;
+package mvc.controller;
 
-import model.Server;
-import model.Task;
-import view.InputFrame;
-import view.SimulationFrame;
+import mvc.model.Server;
+import mvc.model.Task;
+import mvc.view.InputFrame;
+import mvc.view.SimulationFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -167,8 +167,8 @@ public class SimulationManager implements Runnable {
         }
         JOptionPane.showMessageDialog(null, "SIMULATION DONE AT: " + currentTime + " s\n" + "Average waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + " s"
                 + "\nAverage service time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgServiceTime() / (currentTime - 1)) + " s" + "\nPeak hour: " + scheduler.getPeakHour(currentTime) + " s", "DONE", JOptionPane.INFORMATION_MESSAGE);
-        logger.info("\nAvg waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + "\nAvg service time: " +
-                new DecimalFormat("0.00").format(scheduler.getFinalAvgServiceTime() / (currentTime - 1)) + "\nPeak Hour: " + scheduler.getPeakHour(currentTime));
+        logger.info("\nAvg waiting time: " + new DecimalFormat("0.00").format(scheduler.getFinalAvgWaitingTime() / (currentTime - 1)) + " s" + "\nAvg service time: " +
+                new DecimalFormat("0.00").format(scheduler.getFinalAvgServiceTime() / (currentTime - 1)) + " s" + "\nPeak Hour: " + scheduler.getPeakHour(currentTime) + " s");
     }
 
     public static void main(String[] args) {

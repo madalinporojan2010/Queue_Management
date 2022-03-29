@@ -1,7 +1,7 @@
-package controller;
+package mvc.controller;
 
-import model.Server;
-import model.Task;
+import mvc.model.Server;
+import mvc.model.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ public class Scheduler {
     private int maxNoServers;
     private int maxTasksPerServer;
     private float avgWaitingTime;
-    private float maxAvgWaitingTime;
+    private float maxWaitingTime;
     private float avgServiceTime;
 
     private float finalAvgWaitingTime;
@@ -95,8 +95,8 @@ public class Scheduler {
     }
 
     public int getPeakHour(int currentTime) {
-        if (maxAvgWaitingTime < avgWaitingTime) {
-            maxAvgWaitingTime = avgWaitingTime;
+        if (maxWaitingTime < avgWaitingTime) {
+            maxWaitingTime = avgWaitingTime;
             peakHour = currentTime;
         }
         return peakHour;

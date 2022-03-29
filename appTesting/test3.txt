@@ -82313,6 +82313,6 @@ Queue 20: (684, 69, 4)
 (306, 98, 9)
 (412, 100, 3)
 
-Avg waiting time: 20.53
-Avg service time: 5.74
-Peak Hour: 100
+Avg waiting time: 20.53 s
+Avg service time: 5.74 s
+Peak Hour: 100 s

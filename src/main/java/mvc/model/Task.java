@@ -1,4 +1,4 @@
-package model;
+package mvc.model;
 
 public class Task implements Comparable<Task> {
     private int id;

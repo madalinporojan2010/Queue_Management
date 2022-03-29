@@ -95,6 +95,6 @@ Time 23
 Queue 1: 
 Queue 2: 
 
-Avg waiting time: 0.30
-Avg service time: 1.02
-Peak Hour: 17
+Avg waiting time: 0.30 s
+Avg service time: 1.02 s
+Peak Hour: 17 s

@@ -1,4 +1,4 @@
-package model;
+package mvc.model;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
