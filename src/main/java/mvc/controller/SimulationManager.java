@@ -92,9 +92,9 @@ public class SimulationManager implements Runnable {
     public List<Task> generateRandomTasks() {
         List<Task> generatedTasks = Collections.synchronizedList(new CustomArrayList());
 
-        for (int i = 0; i < numberOfClients; i++) {
+        for (int size = 0; size < numberOfClients; size++) {
             Random random = new Random();
-            Task t = new Task(i, random.nextInt(minArrivalTime, maxArrivalTime + 1), random.nextInt(minServiceTime, maxServiceTime + 1));
+            Task t = new Task(size, random.nextInt(minArrivalTime, maxArrivalTime + 1), random.nextInt(minServiceTime, maxServiceTime + 1));
             generatedTasks.add(t);
         }
         generatedTasks.sort(Task::compareTo);
@@ -119,14 +119,14 @@ public class SimulationManager implements Runnable {
             simulationFrame.getWaitingArea().setVisible(false);
         }
         int numberOfDisplayedQueues = Math.min(numberOfQueues, 5);
-        for (int i = 0; i < numberOfDisplayedQueues; i++) {
-            simulationFrame.getQueueAreas()[i].setText(scheduler.getServers().get(i).toString());
-            if (scheduler.getServers().get(i).getTasksQueue().size() == 0) {
-                simulationFrame.getQueueAreas()[i].setVisible(false);
-                simulationFrame.getQueueLabels()[i].setForeground(Color.RED);
+        for (int size = 0; size < numberOfDisplayedQueues; size++) {
+            simulationFrame.getQueueAreas()[size].setText(scheduler.getServers().get(size).toString());
+            if (scheduler.getServers().get(size).getTasksQueue().size() == 0) {
+                simulationFrame.getQueueAreas()[size].setVisible(false);
+                simulationFrame.getQueueLabels()[size].setForeground(Color.RED);
             } else {
-                simulationFrame.getQueueAreas()[i].setVisible(true);
-                simulationFrame.getQueueLabels()[i].setForeground(Color.GREEN);
+                simulationFrame.getQueueAreas()[size].setVisible(true);
+                simulationFrame.getQueueLabels()[size].setForeground(Color.GREEN);
             }
         }
 
@@ -142,11 +142,11 @@ public class SimulationManager implements Runnable {
         int currentTime = 0;
         while (currentTime < simulationInterval) {
             logger.info("\nTime " + currentTime);
-            for (int i = 0; i < tasks.size() && i >= 0; i++) {
-                if (tasks.get(i).getArrivalTime() == currentTime) {
-                    scheduler.dispatchTask(tasks.get(i));
-                    tasks.remove(i);
-                    i--;
+            for (int size = 0; size < tasks.size() && size >= 0; size++) {
+                if (tasks.get(size).getArrivalTime() == currentTime) {
+                    scheduler.dispatchTask(tasks.get(size));
+                    tasks.remove(size);
+                    size--;
                 }
             }
             for (Server s : scheduler.getServers()) {

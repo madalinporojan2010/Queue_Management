@@ -26,7 +26,7 @@ public class Scheduler {
     public Scheduler(int maxNoServers, int maxTasksPerServer, SelectionPolicy selectionPolicy) {
         servers = Collections.synchronizedList(new ArrayList<>());
         this.maxTasksPerServer = maxTasksPerServer;
-        for (int i = 0; i < maxNoServers; i++) {
+        for (int size = 0; size < maxNoServers; size++) {
             Server server = new Server(maxTasksPerServer);
             Thread thread = new Thread(server);
             thread.start();
